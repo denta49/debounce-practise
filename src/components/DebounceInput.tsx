@@ -2,32 +2,25 @@ import React, { FunctionComponent, useEffect, useState } from "react";
 
 import { Input } from "@/components/ui/input";
 
-type Props = {};
-const DebounceInput: FunctionComponent<Props> = (props) => {
-  const [query, setQuery] = useState("");
+const DebounceInput: FunctionComponent = () => {
+  const [query, setQuery] = useState<string>("");
 
-  const fetchData = (v: string) => {
-    if (!v) return;
-    fetch(`/api/search?query=${v}`)
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data);
-      });
+  const fetchData = (query: string) => {
+    if (!query) return;
+    fetch(`/api/search?query=${encodeURIComponent(query)}`)
+      .then((res) => {
+        res.json();
+      })
+      .catch((err) => console.log(err));
   };
 
   useEffect(() => {
-    if (!query) return;
-
-    const timerId = setTimeout(() => {
+    const timer = setTimeout(() => {
       fetchData(query);
     }, 300);
 
-    return () => {
-      clearTimeout(timerId);
-    };
+    return () => clearTimeout(timer);
   }, [query]);
 
   return <Input onChange={(v) => setQuery(v.target.value)} />;
 };
-
-export default DebounceInput;
