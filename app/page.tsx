@@ -1,5 +1,5 @@
+import DebounceInput from "@/components/DebounceInput";
 import { Button } from "@/components/ui/button";
-import {Input} from "@/components/ui/input";
 
 export default function Home() {
   return (
@@ -11,8 +11,7 @@ export default function Home() {
           </h1>
         </div>
         <Button>Test</Button>
-        <Input placeholder="Test input" />
-
+        <DebounceInput />
       </main>
     </div>
   );
