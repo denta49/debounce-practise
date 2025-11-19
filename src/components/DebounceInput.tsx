@@ -6,17 +6,19 @@ import { Input } from "@/components/ui/input";
 const DebounceInput: FunctionComponent = () => {
   const [query, setQuery] = useState<string>("");
 
-  const fetchData = (query: string) => {
-    if (!query) return;
-    console.log("Fetching data for query:", query);
+  const getData = (query: string) => {
+    if (!query) {
+      return;
+    }
+    console.log("data fetch");
   };
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      fetchData(query);
+    if (!query) return;
+    const timerId = setTimeout(() => {
+      getData(query);
     }, 300);
-
-    return () => clearTimeout(timer);
+    return () => clearTimeout(timerId);
   }, [query]);
 
   return <Input onChange={(v) => setQuery(v.target.value)} />;

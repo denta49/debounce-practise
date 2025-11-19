@@ -1,40 +1,43 @@
 import React, {
   createContext,
-  FunctionComponent,
+  ReactNode,
   useContext,
   useMemo,
   useState,
 } from "react";
 
 type Theme = "light" | "dark";
+
 type ThemeContextType = {
   theme: Theme;
-  setTheme: (theme: Theme) => void;
+  toggleTheme: (v: Theme) => void;
 };
 
-export const ThemeContext = createContext<ThemeContextType | undefined>(
-  undefined,
-);
-
-export const useTheme = (): ThemeContextType => {
+export const ThemeContext = createContext<ThemeContextType>({
+  theme: "light",
+  toggleTheme: () => {},
+});
+const useTheme = (): ThemeContextType => {
   const ctx = useContext(ThemeContext);
   if (!ctx) {
-    throw new Error("useTheme must be used within a ThemeProvider");
+    throw new Error("error");
   }
   return ctx;
 };
-
-export const ThemeContextProvider: FunctionComponent<{
-  children: React.ReactNode;
-}> = ({ children }) => {
-  const [theme, setTheme] = useState<Theme>("light");
-
+export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
+  const [theme, setState] = useState<Theme>("light");
   const toggleTheme = () => {
-    setTheme((prevTheme) => (prevTheme === "light" ? "dark" : "light"));
+    setState((prev) => (prev == "light" ? "dark" : "light"));
   };
-  const val = useMemo(() => {
-    return { theme, setTheme, toggleTheme };
-  }, [theme]);
 
-  return <ThemeContext.Provider value={val}>{children}</ThemeContext.Provider>;
+  const value = useMemo(
+    () => ({
+      theme,
+      toggleTheme,
+    }),
+    [theme], // setTheme i toggleTheme są stabilne (funkcja z useState / zamknięta nad setTheme)
+  );
+  return (
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+  );
 };

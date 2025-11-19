@@ -1,27 +1,29 @@
-"use client";
-import React, { FunctionComponent, useEffect, useRef } from "react";
+import React, { FunctionComponent, useEffect, useRef, useState } from "react";
 
-const ThrottleScrollToTop: FunctionComponent = () => {
-  const timerIdRef = useRef<null | number>(null);
-
-  const onScrollHandler = () => {
-    if (timerIdRef.current !== null) return;
-    timerIdRef.current = window.setTimeout(() => {
-      timerIdRef.current = null;
-      console.log("Scroll event at", new Date().toISOString());
-    }, 1000);
-  };
+export const ThrottleScrollToTop: FunctionComponent = () => {
+  const [showButton, setShowButton] = useState<boolean>(false);
+  const timerId = useRef<number | null>(null);
 
   useEffect(() => {
-    window.addEventListener("scroll", onScrollHandler);
+    const handleThrottle = () => {
+      if (timerId.current !== null) {
+        return;
+      }
+      timerId.current = window.setTimeout(() => {
+        if (window.scrollY > 300) {
+          setShowButton(true);
+        }
+      }, 300);
+    };
+    window.addEventListener("scroll", handleThrottle);
+
     return () => {
-      window.removeEventListener("scroll", onScrollHandler);
-      if (timerIdRef.current) {
-        clearTimeout(timerIdRef.current);
+      window.removeEventListener("scroll", handleThrottle);
+      if (timerId.current !== null) {
+        clearTimeout(timerId.current);
       }
     };
   }, []);
 
   return <></>;
 };
-export default ThrottleScrollToTop;
