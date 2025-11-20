@@ -1,43 +1,38 @@
-import React, {
+import {
   createContext,
+  FunctionComponent,
   ReactNode,
   useContext,
-  useMemo,
   useState,
 } from "react";
 
-type Theme = "light" | "dark";
-
 type ThemeContextType = {
-  theme: Theme;
-  toggleTheme: (v: Theme) => void;
+  theme: "light" | "dark";
+  toggleTheme: (v: ThemeContextType["theme"]) => void;
 };
 
-export const ThemeContext = createContext<ThemeContextType>({
-  theme: "light",
-  toggleTheme: () => {},
-});
-const useTheme = (): ThemeContextType => {
+export const ThemeContext = createContext<ThemeContextType | undefined>(
+  undefined,
+);
+
+function useThemeContext() {
   const ctx = useContext(ThemeContext);
-  if (!ctx) {
-    throw new Error("error");
-  }
+  if (!ctx) return;
   return ctx;
-};
-export const ThemeContextProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setState] = useState<Theme>("light");
+}
+
+export const ThemeContextProvider: FunctionComponent<{
+  children: ReactNode;
+}> = ({ children }) => {
+  const [theme, setTheme] = useState<ThemeContextType["theme"]>("light");
+
   const toggleTheme = () => {
-    setState((prev) => (prev == "light" ? "dark" : "light"));
+    setTheme((prevState) => (prevState === "light" ? "dark" : "light"));
   };
 
-  const value = useMemo(
-    () => ({
-      theme,
-      toggleTheme,
-    }),
-    [theme], // setTheme i toggleTheme są stabilne (funkcja z useState / zamknięta nad setTheme)
-  );
   return (
-    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
+    <ThemeContext.Provider value={{ theme: theme, toggleTheme: toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
   );
 };
