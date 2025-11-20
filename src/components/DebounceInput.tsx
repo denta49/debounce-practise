@@ -18,7 +18,7 @@ const DebounceInput: FunctionComponent = () => {
     return () => {
       clearTimeout(timerId);
     };
-  }, [query]);
+  }, [query, fetchData]);
 
   return <Input onChange={(v) => setQuery(v.target.value)} />;
 };
