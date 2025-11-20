@@ -1,15 +1,21 @@
 "use client";
-import React, { FunctionComponent, useEffect, useState } from "react";
+import React, {
+  FunctionComponent,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 
 import { Input } from "@/components/ui/input";
 
 const DebounceInput: FunctionComponent = () => {
   const [query, setQuery] = useState<string>("");
 
-  const fetchData = (v: string) => {
+  //eslint-disable-next-line
+  const fetchData = useCallback((v: string) => {
     if (!query) return;
     console.log("fetched");
-  };
+  }, []);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
