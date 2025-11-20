@@ -1,4 +1,5 @@
 import DebounceInput from "@/components/DebounceInput";
+import OptimizedList from "@/components/OptimizedList";
 import { ThrottleScrollToTop } from "@/components/ThrottleScrollToTop";
 
 export default function Home() {
@@ -21,6 +22,8 @@ export default function Home() {
         <DebounceInput />
         Throttle:
         <ThrottleScrollToTop />
+        OptimizedList:
+        <OptimizedList />
       </main>
     </div>
   );
