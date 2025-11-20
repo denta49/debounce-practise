@@ -11,11 +11,13 @@ import { Input } from "@/components/ui/input";
 const DebounceInput: FunctionComponent = () => {
   const [query, setQuery] = useState<string>("");
 
-  //eslint-disable-next-line
-  const fetchData = useCallback((v: string) => {
-    if (!query) return;
-    console.log("fetched");
-  }, []);
+  const fetchData = useCallback(
+    (v: string) => {
+      if (!v) return;
+      console.log("fetched");
+    },
+    [query],
+  );
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {
